@@ -5,7 +5,7 @@
 - You must be running the [latest nightly release of Firebot](https://github.com/crowbartools/firebot-nightly/releases) (v5.63.0 beta)
 
 ### Setup
-1. Download the latest **firebotInfluxDB.js** file from [Releases]([https://github.com/ebiggz/firebot-script-minecraft-rcon/releases](https://github.com/ebiggz/firebot-script-influx-db/releases))
+1. Download the latest **firebotInfluxDB.js** file from [Releases](https://github.com/ebiggz/firebot-script-minecraft-rcon/releases)
 2. Add the **firebotInfluxDB.js** as a startup script in Firebot (_Settings_ > _Scripts_ > _Startup Scripts_)
 3. Fill out the script settings
 4. Add a **Write Data (InfluxDB)** effect to anything you want!
