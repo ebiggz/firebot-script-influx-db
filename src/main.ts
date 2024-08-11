@@ -7,9 +7,9 @@ import { writeDataToInfluxDbEffectType } from "./effects/write-data";
 const script: Firebot.CustomScript<InfluxDbConfig> = {
   getScriptManifest: () => {
     return {
-      name: "InfluxDB Connector",
+      name: "InfluxDB",
       description:
-        'Write data to InfluxDB via the "Write Data To InfluxDB" Effect',
+        'Write data to InfluxDB via the "Write Data (InfluxDB)" Effect',
       author: "ebiggz",
       version: "1.0",
       firebotVersion: "5",

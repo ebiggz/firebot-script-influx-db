@@ -1,6 +1,6 @@
 {
   "name": "firebot-script-influxdb",
-  "scriptOutputName": "influxdbConnector",
+  "scriptOutputName": "firebotInfluxDB",
   "version": "1.0.0",
   "description": "Adds InfluxDB support to Firebot",
   "main": "",
