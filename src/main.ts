@@ -1,32 +1,83 @@
 import { Firebot } from "@crowbartools/firebot-custom-scripts-types";
+import { InfluxDbConfig, setInfluxConfig } from "./config";
+import { initLogger } from "./logger";
+import { initFrontendEventListeners } from "./events";
+import { writeDataToInfluxDbEffectType } from "./effects/write-data";
 
-interface Params {
-  message: string;
-}
-
-const script: Firebot.CustomScript<Params> = {
+const script: Firebot.CustomScript<InfluxDbConfig> = {
   getScriptManifest: () => {
     return {
-      name: "Starter Custom Script",
-      description: "A starter custom script for build",
-      author: "SomeDev",
+      name: "InfluxDB Connector",
+      description:
+        'Write data to InfluxDB via the "Write Data To InfluxDB" Effect',
+      author: "ebiggz",
       version: "1.0",
       firebotVersion: "5",
+      startupOnly: true,
     };
   },
   getDefaultParameters: () => {
     return {
-      message: {
+      url: {
         type: "string",
-        default: "Hello World!",
-        description: "Message",
-        secondaryDescription: "Enter a message here",
+        title: "URL",
+        description: "URL of the InfluxDB instance",
+        default: "http://localhost:8086",
+      },
+      apiToken: {
+        type: "password",
+        title: "API Token",
+        description: "An API token with write access to the InfluxDB instance",
+        placeholder: "Enter token",
+        default: "",
+      },
+      orgNames: {
+        type: "editable-list",
+        title: "Organizations",
+        settings: {
+          addLabel: "Add Organization",
+          editLabel: "Edit Organization",
+          noneAddedText: "No organizations added",
+          sortable: false,
+          useTextArea: false,
+        },
+        default: ["my-org"],
+      },
+      bucketNames: {
+        type: "editable-list",
+        title: "Bucket Names",
+        settings: {
+          addLabel: "Add Bucket",
+          editLabel: "Edit Edit",
+          sortable: false,
+          noneAddedText: "No buckets added",
+          useTextArea: false,
+        },
+        default: ["my-bucket"],
+      },
+      precision: {
+        type: "enum",
+        title: "Precision",
+        options: ["ns", "us", "ms", "s"],
+        default: "ns",
       },
     };
   },
-  run: (runRequest) => {
+  run: async (runRequest) => {
     const { logger } = runRequest.modules;
-    logger.info(runRequest.parameters.message);
+
+    initLogger(logger);
+
+    setInfluxConfig(runRequest.parameters);
+
+    initFrontendEventListeners(runRequest.modules.frontendCommunicator);
+
+    runRequest.modules.effectManager.registerEffect(
+      writeDataToInfluxDbEffectType
+    );
+  },
+  parametersUpdated: (parameters) => {
+    setInfluxConfig(parameters);
   },
 };
 
